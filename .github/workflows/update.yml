@@ -1,0 +1,25 @@
+name: NetiShield Update
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: pip install requests
+      - run: python update.py
+      - run: |
+          git config user.name "NetiShield Bot"
+          git config user.email "bot@netishield.ir"
+          git add sub.txt
+          git diff --staged --quiet || git commit -m "Auto update $(date)"
+          git push
