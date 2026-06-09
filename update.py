@@ -55,34 +55,51 @@ def clean_config(c):
 def rename_config(c, idx):
     return f"{clean_config(c)}{FINAL_TAG}{idx}"
 
-def create_time_vless():
+def create_info_config(total_configs):
+    """ساخت کانفیگ اطلاعاتی با پروتکل VMESS معتبر"""
     now = datetime.now()
     time_str = now.strftime("%Y-%m-%d %H:%M:%S")
-    vless = {
+    
+    # محاسبه دقیقه گذشته از نیمه شب
+    minute_of_day = now.hour * 60 + now.minute
+    
+    # یک کانفیگ VMESS سبک و معتبر (سرور تستی)
+    info_config = {
         "v": "2",
-        "ps": f"⏰ NetiShield | Last Update: {time_str}",
-        "add": "time.netishield.ir",
+        "ps": f"📊 NetiShield Info | Update: {time_str} | Configs: {total_configs}",
+        "add": "185.159.157.229",
         "port": "443",
-        "id": "netishield-time",
+        "id": "netishield-info-display",
         "aid": "0",
         "scy": "auto",
         "net": "ws",
         "type": "none",
-        "host": "",
-        "path": "/time",
+        "host": "info.netishield.ir",
+        "path": "/info",
         "tls": "tls"
     }
-    return f"vless://{base64.b64encode(json.dumps(vless).encode()).decode()}"
+    
+    # تبدیل به VMESS
+    vmess_json = json.dumps(info_config)
+    vmess_b64 = base64.b64encode(vmess_json.encode()).decode()
+    
+    return f"vmess://{vmess_b64}"
 
 def main():
     log("🚀 شروع NetiShield", "info")
+    log(f"تعداد منابع: {len(SOURCES)}", "info")
+    
     all_configs = []
     for url in SOURCES:
         all_configs.extend(fetch_source(url))
+    
     if not all_configs:
         log("هیچ کانفیگی دریافت نشد!", "error")
         return False
-    log(f"مجموع: {len(all_configs)} کانفیگ", "success")
+    
+    log(f"مجموع خام: {len(all_configs)} کانفیگ", "success")
+    
+    # حذف تکراری
     unique = []
     seen = set()
     for c in all_configs:
@@ -90,17 +107,34 @@ def main():
         if key not in seen:
             seen.add(key)
             unique.append(c)
+    
     log(f"بدون تکراری: {len(unique)} کانفیگ", "success")
+    
+    # انتخاب تصادفی
     if len(unique) > TOTAL_CONFIGS:
         selected = random.sample(unique, TOTAL_CONFIGS)
+        log(f"انتخاب {TOTAL_CONFIGS} کانفیگ تصادفی", "success")
     else:
         selected = unique
+        log(f"همه {len(selected)} کانفیگ استفاده شد", "wait")
+    
+    # تغییر نام
     renamed = [rename_config(c, i+1) for i, c in enumerate(selected)]
-    final = [create_time_vless()] + renamed
+    
+    # کانفیگ اطلاعاتی (با VMESS معتبر)
+    info_config = create_info_config(len(renamed))
+    
+    # ترکیب نهایی
+    final = [info_config] + renamed
+    
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write("\n".join(final))
+    
     log(f"✅ {OUTPUT_FILE} ذخیره شد", "success")
-    log(f"📊 {len(final)} کانفیگ (1 زمان + {len(renamed)} NetiShield)", "success")
+    log(f"📊 {len(final)} کانفیگ:", "info")
+    log(f"   - کانفیگ اطلاعات: 1 (VMESS)", "info")
+    log(f"   - کانفیگ NetiShield: {len(renamed)}", "info")
+    
     return True
 
 if __name__ == "__main__":
