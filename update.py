@@ -123,6 +123,7 @@ def main():
     info_config = create_info_config(len(renamed))
     final = [info_config] + renamed
     
+    # ✅ درست: با \n بین هر کانفیگ
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         f.write("\n".join(final))
     
