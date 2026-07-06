@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetiShield - ساب‌لینک V2Ray</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Vazir:wght@300;400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- پس‌زمینه متحرک -->
+    <div class="background-animation">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+        <div class="orb orb4"></div>
+    </div>
+
+    <div class="container">
+        <!-- هدر -->
+        <header class="fade-in">
+            <div class="logo">
+                <span class="shield-icon">🛡️</span>
+                <h1>NetiShield</h1>
+            </div>
+            <p class="subtitle">⚡ ساب‌لینک خودکار V2Ray</p>
+            <div class="status-badge">
+                <span class="dot"></span>
+                سیستـم فعال
+            </div>
+        </header>
+
+        <!-- کارت اطلاعات -->
+        <div class="info-card slide-up">
+            <div class="info-grid">
+                <div class="info-item" data-delay="0">
+                    <span class="label">📊 تعداد کانفیگ</span>
+                    <span class="value" id="configCount">0</span>
+                </div>
+                <div class="info-item" data-delay="0.1">
+                    <span class="label">⏰ آخرین بروزرسانی</span>
+                    <span class="value" id="lastUpdate">در حال دریافت...</span>
+                </div>
+                <div class="info-item" data-delay="0.2">
+                    <span class="label">📡 وضعیت</span>
+                    <span class="value status active" id="status">✅ فعال</span>
+                </div>
+                <div class="info-item" data-delay="0.3">
+                    <span class="label">🔗 لینک ساب</span>
+                    <span class="value" id="subLink">در حال دریافت...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- دکمه‌ها -->
+        <div class="actions slide-up" data-delay="0.4">
+            <button class="btn primary" onclick="copySubLink()">
+                <span class="btn-icon">📋</span> کپی لینک
+            </button>
+            <button class="btn secondary" onclick="downloadSub()">
+                <span class="btn-icon">⬇️</span> دانلود فایل
+            </button>
+            <button class="btn refresh" onclick="refreshData()">
+                <span class="btn-icon">🔄</span> بروزرسانی
+            </button>
+        </div>
+
+        <!-- کارت منابع -->
+        <div class="sources-card slide-up" data-delay="0.5">
+            <h2>📡 منابع ساب‌لینک</h2>
+            <ul id="sourcesList">
+                <li>در حال دریافت...</li>
+            </ul>
+        </div>
+
+        <!-- کارت کانفیگ‌ها -->
+        <div class="configs-card slide-up" data-delay="0.6">
+            <h2>📝 نمونه کانفیگ‌ها</h2>
+            <div class="config-list" id="configList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    در حال دریافت کانفیگ‌ها...
+                </div>
+            </div>
+            <button class="btn show-more" onclick="showAllConfigs()">
+                نمایش همه کانفیگ‌ها
+            </button>
+        </div>
+
+        <!-- فوتر -->
+        <footer class="fade-in">
+            <p>NetiShield Sub Link | کانال تلگرام: @NetiShield</p>
+            <p class="update-time">آخرین بروزرسانی: <span id="footerUpdate">در حال دریافت...</span></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
